@@ -1,0 +1,22 @@
+@import 'assets/sass/index';
+
+.layout {
+    max-width: 1024px;
+    min-height: 100%;
+    background-color: $color-primary-white;
+    padding: 0;
+
+    .main {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    footer {
+        min-height: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

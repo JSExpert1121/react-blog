@@ -1,0 +1,16 @@
+@import '../abstracts/variables';
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+html {
+  font-size: $font-size-base;
+  font-family: 'Raleway', sans-serif;
+}
+body {
+  box-sizing: border-box;
+}

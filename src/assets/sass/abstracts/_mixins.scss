@@ -1,0 +1,45 @@
+@mixin mobile {
+  @media (max-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@mixin flexColumn($justify-content: '', $align-items: '') {
+  display: flex;
+  flex-direction: column;
+  @if $justify-content!= '' {
+    justify-content: $justify-content;
+  }
+  @if $align-items != '' {
+    align-items: $align-items;
+  }
+}
+
+@mixin flexRow($justify-content: '', $align-items: '') {
+  display: flex;
+  flex-direction: row;
+  @if $justify-content!= '' {
+    justify-content: $justify-content;
+  }
+  @if $align-items != '' {
+    align-items: $align-items;
+  }
+}
+
+@mixin listReset($margin: 0, $padding: 0) {
+  list-style-type: none;
+  margin: $margin;
+  padding: $padding;
+}
