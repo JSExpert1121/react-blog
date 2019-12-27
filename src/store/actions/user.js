@@ -24,6 +24,9 @@ const gotProfile = data => ({
 export const login = (email, password) => async dispatch => {
     const data = await AuthApis.login(email, password)
     dispatch(loginSuccess(data))
+    const result = await UserApis.getProfile(data.access_token)
+    console.log(result)
+    dispatch(gotProfile(result.profile))
 }
 
 export const refreshToken = (token, refreshToken) => async dispatch => {
@@ -38,7 +41,7 @@ export const logout = token => async dispatch => {
 
 export const getProfile = token => async dispatch => {
     const data = await UserApis.getProfile(token)
-    dispatch(gotProfile(data))
+    dispatch(gotProfile(data.profile))
 }
 
 export const addEducation = (token, data) => async dispatch => {
