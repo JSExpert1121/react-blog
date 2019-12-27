@@ -1,9 +1,23 @@
 import React from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
+import EmailInput from 'components/form/EmailInput'
+import PassInput from 'components/form/PassInput'
+import { useValidator } from 'components/hooks/validator'
+import * as validators from 'helper/validators'
 
 import * as UserActions from 'store/actions/user'
 
 import './auth.scss'
+
+const emailValidators = [
+    { func: validators.isRequired, msg: 'Email is required' },
+    { func: validators.isEmail, msg: 'Invalid email address' }
+]
+const passValidators = [
+    { func: validators.isRequired, msg: 'Password is required' }
+]
 
 const Login = () => {
 
@@ -14,118 +28,93 @@ const Login = () => {
     const [redir, setRedir] = React.useState('')
 
     const location = useLocation('')
-    const submitRef = React.useRef()
+    const dispatch = useDispatch()
 
-    React.useEffect(() => {
-        submitRef.current = async () => {
-            if (busy) {
-                return
-            }
+    const emailMsg = useValidator(email, emailValidators)
+    const passMsg = useValidator(password, passValidators)
 
-            setBusy(true)
-            try {
-                await UserActions.login(email, password)
-                setBusy(false)
-                setRedir(location.state ? location.state.referrer || '' : '')
-            } catch (err) {
-                if (err.errors) {
-                    setError(err.errors)
-                } else {
-                    setError('Unknown Error')
-                }
-            } finally {
-                setBusy(false)
+    const handleSubmit = React.useCallback(async e => {
+        e.preventDefault()
+        if (busy) {
+            return
+        }
+
+        setBusy(true)
+        try {
+            await dispatch(UserActions.login(email, password))
+            setRedir(location.state ? location.state.referrer || '/' : '/')
+        } catch (err) {
+            console.log(err)
+            const error = err.data
+            setBusy(false)
+            if (error.errors) {
+                setError(error.errors)
+            } else {
+                setError('Unknown Error')
             }
         }
-    }, [])
+    }, [busy, email, password, location.state, dispatch])
+
+    React.useEffect(() => {
+        setError('')
+    }, [email, password])
+
+    const submittable = React.useMemo(() => {
+        return email && password && !emailMsg && !passMsg
+    }, [email, password, emailMsg, passMsg])
 
     if (!!redir) {
         return <Redirect to={redir} />
     }
 
     return (
-        <section className='d-flex w-100 h-100 justify-content-center align-items-center'>
+        <section className='d-flex flex-column shadow-sm p-5 bg-white rounded'>
+            <div className='row my-5 mx-auto'>
+                <i className='fa fa-lock fa-6x lock' aria-hidden="true" />
+            </div>
             <form className='login-form'>
-
-                {/* email input */}
-                <div className='form-group row'>
-                    <label
-                        htmlFor='login-email'
-                        className='col-sm-3 col-form-label'
-                    >
-                        Email
-                    </label>
-                    <div className='col-sm-9'>
-                        <input
-                            type='text'
-                            className='form-control'
-                            placeholder='Your email address'
-                            autoComplete='email'
-                            aria-describedby='email-help'
-                            id='login-email'
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        <small
-                            id="email-help"
-                            className={"form-text text-muted" +
-                                (error.includes('User') || " d-none")}
-                        >
-                            User not found
-                        </small>
-                    </div>
-                </div>
-
-                {/* password input */}
-                <div className='form-group row'>
-                    <label
-                        htmlFor='login-password'
-                        className='col-sm-3 col-form-label'
-                    >
-                        Password
-                    </label>
-                    <div className='col-sm-9'>
-                        <input
-                            type='password'
-                            className='form-control'
-                            placeholder='Password'
-                            id='login-password'
-                            autoComplete='current-password'
-                            aria-describedby='password-help'
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                        />
-                        <small
-                            id="password-help"
-                            className={"form-text text-muted" +
-                                (error.includes('Password') || " d-none")}
-                        >
-                            Password mismatch
-                        </small>
-                    </div>
-                </div>
 
                 {/* unknown error */}
                 <div className='form-group row'>
                     <small
                         id="login-form-help"
-                        className={"form-text text-muted" +
-                            (error.includes('Password') || " d-none")}
+                        className='form-text text-danger mx-auto my-2'
                     >
-                        Unknown error
+                        {error}
                     </small>
                 </div>
+
+                {/* email input */}
+                <EmailInput
+                    placeholder='Your email address'
+                    autoComplete='email'
+                    prefix='login'
+                    email={email}
+                    setEmail={setEmail}
+                    error={emailMsg}
+                />
+
+                {/* password input */}
+                <PassInput
+                    placeholder='Password'
+                    autoComplete='current-password'
+                    prefix='login'
+                    password={password}
+                    setPassword={setPassword}
+                    error={passMsg}
+                />
 
                 {/* submit button */}
                 <div className='form-group row'>
                     <button
                         className='mx-auto my-2 btn btn-primary signin-button'
-                        onClick={submitRef.current}
+                        disabled={!submittable}
+                        onClick={handleSubmit}
                     >
                         {busy ? (
                             <>
                                 <span
-                                    class="spinner-border spinner-border-sm"
+                                    className="spinner-border spinner-border-sm mr-2"
                                     role="status"
                                     aria-hidden="true"
                                 />
