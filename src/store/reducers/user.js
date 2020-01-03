@@ -18,6 +18,11 @@ const userReducer = (state = initState, action) => {
                 token: payload.access_token,
                 refresh_token: payload.refresh_token
             }
+        case ActionTypes.USER_GET_SETTING_SUCCESS:
+            return {
+                ...state,
+                user: payload
+            }
         case ActionTypes.AUTH_REFRESH_TOKEN_SUCCESS:
             return {
                 ...state,

@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import AuthPages from 'containers/pages/auth'
 import BlogPages from 'containers/pages/blog'
 import UserPages from 'containers/pages/user'
+import SecureRoute from './SecureRoute'
 
 const AppRouter = () => {
     return (
@@ -12,9 +13,9 @@ const AppRouter = () => {
                 <Route path='/auth'>
                     <AuthPages />
                 </Route>
-                <Route path='/user'>
+                <SecureRoute path='/user'>
                     <UserPages />
-                </Route>
+                </SecureRoute>
                 <Route path='/'>
                     <BlogPages />
                 </Route>

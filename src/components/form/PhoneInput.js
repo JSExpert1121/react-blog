@@ -1,31 +1,29 @@
 import React from 'react'
 
-
-const EmailInput = props => {
-
-    const { prefix, email, setEmail, error, ...rest } = props;
+const PhoneInput = props => {
+    const { prefix, phone, setPhone, error, ...rest } = props;
 
     const cls = (error) ? 'form-control border border-danger' : 'form-control'
     return (
         <div className='form-group row'>
             <label
-                htmlFor={`${prefix}-email`}
+                htmlFor={`${prefix}-phone`}
                 className='col-sm-3 col-form-label'
             >
-                Email
+                Phone No
             </label>
             <div className='col-sm-9'>
                 <input
-                    type='email'
+                    type='tel'
                     className={cls}
-                    aria-describedby={`${prefix}-email-help`}
-                    id={`${prefix}-email`}
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    aria-describedby={`${prefix}-phone-help`}
+                    id={`${prefix}-phone`}
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
                     {...rest}
                 />
                 <small
-                    id={`${prefix}-email-help`}
+                    id={`${prefix}-phone-help`}
                     className='form-text text-danger'
                     style={{ visibility: error ? 'visible' : 'hidden' }}
                 >
@@ -36,9 +34,8 @@ const EmailInput = props => {
     )
 }
 
-EmailInput.defaultProps = {
-    init: ''
+PhoneInput.propTypes = {
+
 }
 
-
-export default EmailInput
+export default PhoneInput

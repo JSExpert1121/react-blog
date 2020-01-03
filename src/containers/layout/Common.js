@@ -1,8 +1,10 @@
 import React from 'react'
 
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 import CommonHeader from './CommonHeader'
 import CommonFooter from './CommonFooter'
-
 import './styles.scss'
 
 const CommonLayout = props => {
@@ -16,6 +18,15 @@ const CommonLayout = props => {
                 {props.children}
             </main>
             <Footer />
+            <ToastContainer
+                enableMultiContainer={false}
+                position={toast.POSITION.TOP_CENTER}
+                pauseOnHover
+                hideProgressBar
+                transition={Bounce}
+                autoClose={4000}
+                closeOnClick
+            />
         </div>
     )
 }
