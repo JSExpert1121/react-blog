@@ -13,9 +13,9 @@ import Avatar from 'components/avatar/Avatar'
 import * as UserActions from 'store/actions/user'
 import UserApis from 'service/user'
 
-import './user.scss'
+import '../user.scss'
 
-const Profile = () => {
+const GeneralProfile = () => {
 
     const user = useSelector(state => state.user, shallowEqual)
 
@@ -50,12 +50,13 @@ const Profile = () => {
             toast.success('Profile updated', { className: 'p-4' })
         } catch (err) {
             const error = err.data
-            setBusy(false)
             if (error.errors) {
                 setError(error.errors)
             } else {
                 setError('Unknown Error')
             }
+        } finally {
+            setBusy(false)
         }
     }, [busy, dispatch, user.token, title, zip, city, state, address1, address2, country, desc])
 
@@ -64,6 +65,12 @@ const Profile = () => {
     React.useEffect(() => {
         setTitle(user.profile ? user.profile.title || '' : '')
         setDesc(user.profile ? user.profile.description || '' : '')
+        setAddr1(user.profile ? user.profile.address1 || '' : '')
+        setAddr2(user.profile ? user.profile.address2 || '' : '')
+        setCity(user.profile ? user.profile.city || '' : '')
+        setZip(user.profile ? user.profile.zipCode || '' : '')
+        setState(user.profile ? user.profile.state || '' : '')
+        setCountry(user.profile ? user.profile.country || '' : '')
     }, [user.profile])
 
     const changeTitle = React.useCallback(e => {
@@ -140,7 +147,7 @@ const Profile = () => {
 
 
     return (
-        <section className='d-flex flex-column shadow-sm p-5 bg-white rounded'>
+        <>
             {busy && (
                 <div
                     className='spinner-border busy text-primary m-auto'
@@ -287,8 +294,8 @@ const Profile = () => {
                     </button>
                 </div>
             </form>
-        </section>
+        </>
     )
 }
 
-export default Profile
+export default GeneralProfile
