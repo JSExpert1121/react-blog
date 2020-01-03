@@ -1,9 +1,21 @@
 @import 'assets/sass/index';
 
 .user-form, .pass-form {
-    width: 480px;
+    width: 560px;
 
     .change-button {
         width: 160px;
     }
+
+    .sendcode-button {
+        width: 140px;
+    }
+}
+
+.busy {
+    position: fixed !important;
+    width: 32px;
+    height: 32px;
+    left: 48%;
+    top: 20%;
 }

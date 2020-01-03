@@ -53,6 +53,11 @@ export const getProfile = token => async dispatch => {
     dispatch(gotProfile(data.profile))
 }
 
+export const updateProfile = (token, data) => async dispatch => {
+    const result = await UserApis.updateProfile(token, data)
+    dispatch(gotProfile(result.profile))
+}
+
 export const addEducation = (token, data) => async dispatch => {
     await UserApis.addEducation(token, data)
     const result = await UserApis.getProfile(token)
