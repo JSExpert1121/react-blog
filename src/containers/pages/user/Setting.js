@@ -73,6 +73,10 @@ const Setting = props => {
         }
     }, [busy, name1, name2, dispatch, user.token])
 
+    const submitable = React.useMemo(() => (
+        name1.length > 0 && name2.length > 0
+    ), [name1.length, name2.length])
+
     return (
         <section className='d-flex flex-column shadow-sm px-5 py-4 bg-white rounded'>
             <form className='user-form'>
@@ -115,6 +119,7 @@ const Setting = props => {
                         <button
                             className='mx-auto my-2 btn btn-primary change-button'
                             onClick={handleSubmit}
+                            disabled={!submitable}
                         >
                             {busy ? (
                                 <>

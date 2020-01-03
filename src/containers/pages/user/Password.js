@@ -64,7 +64,7 @@ const PasswordPage = props => {
             const error = err.data
             setBusy(false)
             if (error.errors) {
-                setError(error.errors)
+                setError(JSON.stringify(error.errors))
             } else {
                 setError('Unknown Error')
             }
@@ -75,6 +75,10 @@ const PasswordPage = props => {
         e.preventDefault()
         history.goBack()
     }, [history])
+
+    const submitable = React.useMemo(() => (
+        oldPass.length > 0 && pass1.length > 0 && !pass1Msg && !oldpassMsg
+    ), [oldPass.length, pass1.length, pass1Msg, oldpassMsg])
 
     return (
         <section className='d-flex flex-column shadow-sm px-5 py-4 bg-white rounded'>
@@ -139,6 +143,7 @@ const PasswordPage = props => {
                     </div>
                     <button
                         className='mr-3 my-2 btn btn-primary change-button'
+                        disabled={!submitable}
                         onClick={handleSubmit}
                     >
                         {busy ? (
