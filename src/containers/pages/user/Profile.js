@@ -7,20 +7,13 @@ import SimpleMde from 'react-simplemde-editor'
 import 'easymde/dist/easymde.min.css'
 
 // components
-import PhoneInput from 'components/form/PhoneInput'
+import VerifiedPhoneInput from 'components/form/VerifiedPhoneInput'
 import Avatar from 'components/avatar/Avatar'
-import { useValidator } from 'components/hooks/validator'
 
-import * as validators from 'helper/validators'
 import * as UserActions from 'store/actions/user'
 import UserApis from 'service/user'
 
 import './user.scss'
-
-
-const phoneValidators = [
-    { func: validators.isPhoneNo, msg: 'Invalid phone number' }
-]
 
 const Profile = () => {
 
@@ -29,20 +22,16 @@ const Profile = () => {
     const [title, setTitle] = React.useState(user.profile ? user.profile.title || '' : '')
     const [desc, setDesc] = React.useState(user.profile ? user.profile.description || '' : '')
 
-    // const [address1, setAddr1] = React.useState(user.profile ? user.profile.address1 || '' : '')
-    // const [address2, setAddr2] = React.useState(user.profile ? user.profile.address2 || '' : '')
-    // const [city, setCity] = React.useState(user.profile ? user.profile.city || '' : '')
-    // const [state, setState] = React.useState(user.profile ? user.profile.state || '' : '')
-    // const [country, setCountry] = React.useState(user.profile ? user.profile.country || '' : '')
-
-    const [phone, setPhone] = React.useState('')
-    const [sent, setSent] = React.useState(false)
-    const [code, setCode] = React.useState('')
+    const [address1, setAddr1] = React.useState(user.profile ? user.profile.address1 || '' : '')
+    const [address2, setAddr2] = React.useState(user.profile ? user.profile.address2 || '' : '')
+    const [city, setCity] = React.useState(user.profile ? user.profile.city || '' : '')
+    const [zip, setZip] = React.useState(user.profile ? user.profile.zipCode || '' : '')
+    const [state, setState] = React.useState(user.profile ? user.profile.state || '' : '')
+    const [country, setCountry] = React.useState(user.profile ? user.profile.country || '' : '')
 
     const [error, setError] = React.useState('')
     const [busy, setBusy] = React.useState(false)
 
-    const phoneMsg = useValidator(phone, phoneValidators)
     const dispatch = useDispatch()
 
     const handleSubmit = React.useCallback(async e => {
@@ -52,10 +41,11 @@ const Profile = () => {
         setBusy(true)
         try {
             await dispatch(UserActions.updateProfile(user.token, {
-                // title,
-                // description: desc,
-                // address1, address2,
-                // city, state, country
+                title,
+                description: desc,
+                address1, address2,
+                city, state, country,
+                zipCode: zip
             }))
             toast.success('Profile updated', { className: 'p-4' })
         } catch (err) {
@@ -67,7 +57,7 @@ const Profile = () => {
                 setError('Unknown Error')
             }
         }
-    }, [busy, dispatch, user.token])
+    }, [busy, dispatch, user.token, title, zip, city, state, address1, address2, country, desc])
 
 
     // title
@@ -80,17 +70,34 @@ const Profile = () => {
         setTitle(e.target.value)
     }, [])
 
+    const changeAddress1 = React.useCallback(e => {
+        setAddr1(e.target.value)
+    }, [])
+    const changeAddress2 = React.useCallback(e => {
+        setAddr2(e.target.value)
+    }, [])
+    const changeCity = React.useCallback(e => {
+        setCity(e.target.value)
+    }, [])
+    const changeState = React.useCallback(e => {
+        setState(e.target.value)
+    }, [])
+    const changeCountry = React.useCallback(e => {
+        setCountry(e.target.value)
+    }, [])
+    const changeZip = React.useCallback(e => {
+        setZip(e.target.value)
+    }, [])
+
 
     // phone verify
-    const sendable = phone.length > 0 && !phoneMsg
-    const handleSendcode = React.useCallback(async e => {
-        e.preventDefault()
+    const handleSendcode = React.useCallback(async phone => {
         if (busy) return
 
+        let result = true
         setBusy(true)
         try {
-            await UserApis.requestCode(user.token, phone.replace(/[ \-+]/g, ''))
-            setSent(true)
+            await UserApis.requestCode(user.token, phone)
             toast.success('Verification code was sent', { className: 'p-4' })
         } catch (err) {
             const error = err.data
@@ -99,23 +106,18 @@ const Profile = () => {
             } else {
                 setError('Unknown error')
             }
+            result = false
         } finally {
             setBusy(false)
         }
-    }, [busy, phone, user.token])
 
-    const handleRetry = React.useCallback(e => {
-        e.preventDefault()
+        return result
+    }, [busy, user.token])
+
+    const handleVerify = React.useCallback(async code => {
         if (busy) return
 
-        setSent(false)
-        setPhone('')
-    }, [busy])
-
-    const handleVerify = React.useCallback(async e => {
-        e.preventDefault()
-        if (busy) return
-
+        let result = true
         setBusy(true)
         try {
             await UserApis.verifyPhone(user.token, code)
@@ -128,14 +130,13 @@ const Profile = () => {
             } else {
                 setError('Unknown error')
             }
+            result = false
         } finally {
             setBusy(false)
         }
-    }, [user.token, code, busy])
 
-    const changeCode = React.useCallback(async e => {
-        setCode(e.target.value)
-    }, [])
+        return result
+    }, [user.token, busy])
 
 
     return (
@@ -204,85 +205,77 @@ const Profile = () => {
                 {/* address */}
                 <div className='form-group'>
                     <label htmlFor='inputAddress'>Address</label>
-                    <input type='text' className='form-control' id='inputAddress' placeholder='1234 Main St' />
+                    <input
+                        type='text'
+                        className='form-control'
+                        id='inputAddress'
+                        placeholder='1234 Main St'
+                        value={address1}
+                        onChange={changeAddress1}
+                    />
                 </div>
                 <div className='form-group'>
                     <label htmlFor='inputAddress2'>Address 2</label>
-                    <input type='text' className='form-control' id='inputAddress2' placeholder='Apartment, studio, or floor' />
+                    <input
+                        type='text'
+                        className='form-control'
+                        id='inputAddress2'
+                        placeholder='Apartment, studio, or floor'
+                        value={address2}
+                        onChange={changeAddress2}
+                    />
                 </div>
                 <div className='form-row'>
                     <div className='form-group col-sm-8'>
                         <label htmlFor='inputCity'>City</label>
-                        <input type='text' className='form-control' id='inputCity' />
+                        <input
+                            type='text'
+                            className='form-control'
+                            id='inputCity'
+                            value={city}
+                            onChange={changeCity}
+                        />
                     </div>
                     <div className='form-group col-sm-4'>
                         <label htmlFor='inputZip'>Zip</label>
-                        <input type='text' className='form-control' id='inputZip' />
+                        <input
+                            type='text'
+                            className='form-control'
+                            id='inputZip'
+                            value={zip}
+                            onChange={changeZip}
+                        />
                     </div>
                 </div>
                 <div className='form-row'>
                     <div className='form-group col-sm-6'>
                         <label htmlFor='inputState'>State</label>
-                        <input type='text' className='form-control' id='inputState' />
+                        <input
+                            type='text'
+                            className='form-control'
+                            id='inputState'
+                            value={state}
+                            onChange={changeState}
+                        />
                     </div>
                     <div className='form-group col-sm-6'>
                         <label htmlFor='inputCountry'>Country</label>
-                        <input type='text' id='inputCountry' className='form-control' />
+                        <input
+                            type='text'
+                            id='inputCountry'
+                            className='form-control'
+                            value={country}
+                            onChange={changeCountry}
+                        />
                     </div>
                 </div>
 
                 {/* phone input */}
-                <div className='form-row px-1 mt-2'>
-                    <div className='flex-grow-1 mr-4'>
-                        <PhoneInput
-                            placeholder='Your phone number'
-                            autoComplete='on'
-                            prefix='phone'
-                            phone={phone}
-                            setPhone={setPhone}
-                            error={phoneMsg}
-                            disabled={sent}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <button
-                            className='btn btn-primary sendcode-button'
-                            onClick={handleSendcode}
-                            disabled={!sendable}
-                        >
-                            {sent ? 'Resend Code' : 'Send Code'}
-                        </button>
-                    </div>
-                </div>
-                {sent && (
-                    <div className='form-group row'>
-                        <div className='col-sm-7 d-flex'>
-                            <input
-                                type='number'
-                                className='form-control'
-                                id='inputCode'
-                                placeholder='Verification Code'
-                                value={code}
-                                onChange={changeCode}
-                            />
-                            <button
-                                className='btn btn-primary ml-2'
-                                disabled={code.length !== 4}
-                                onClick={handleVerify}
-                            >
-                                Verify
-                        </button>
-                        </div>
-                        <div className='col-sm-5 text-right'>
-                            <button
-                                className='btn btn-link'
-                                onClick={handleRetry}
-                            >
-                                Try other phone
-                        </button>
-                        </div>
-                    </div>
-                )}
+                <VerifiedPhoneInput
+                    reqCode={handleSendcode}
+                    verifyCode={handleVerify}
+                    profile={user.profile || {}}
+                />
 
                 {/* submit button */}
                 <div className='form-group row mt-4'>
@@ -296,10 +289,6 @@ const Profile = () => {
             </form>
         </section>
     )
-}
-
-Profile.propTypes = {
-
 }
 
 export default Profile
