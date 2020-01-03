@@ -7,6 +7,11 @@ const loginSuccess = (data) => ({
     payload: data
 })
 
+const getuserSuccess = data => ({
+    type: ActionTypes.USER_GET_SETTING_SUCCESS,
+    payload: data
+})
+
 const refreshSuccess = data => ({
     type: ActionTypes.AUTH_REFRESH_TOKEN_SUCCESS,
     payload: data
@@ -25,7 +30,6 @@ export const login = (email, password) => async dispatch => {
     const data = await AuthApis.login(email, password)
     dispatch(loginSuccess(data))
     const result = await UserApis.getProfile(data.access_token)
-    console.log(result)
     dispatch(gotProfile(result.profile))
 }
 
@@ -37,6 +41,11 @@ export const refreshToken = (token, refreshToken) => async dispatch => {
 export const logout = token => async dispatch => {
     await AuthApis.logout(token)
     dispatch(logoutSuccess())
+}
+
+export const updateUsername = (token, firstName, lastName) => async dispatch => {
+    const data = await UserApis.updateUsername(token, firstName, lastName)
+    dispatch(getuserSuccess(data))
 }
 
 export const getProfile = token => async dispatch => {

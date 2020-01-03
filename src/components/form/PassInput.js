@@ -1,7 +1,7 @@
 import React from 'react'
 
 const PassInput = props => {
-    const { prefix, password, setPassword, error, ...rest } = props;
+    const { label, prefix, password, setPassword, error, ...rest } = props;
 
     const cls = error ? 'form-control border border-danger' : 'form-control'
     return (
@@ -10,7 +10,7 @@ const PassInput = props => {
                 htmlFor={`${prefix}-password`}
                 className='col-sm-3 col-form-label'
             >
-                Password
+                {label}
             </label>
             <div className='col-sm-9'>
                 <input
@@ -35,7 +35,8 @@ const PassInput = props => {
 }
 
 PassInput.defaultProps = {
-    init: ''
+    init: '',
+    label: 'Password'
 }
 
 export default PassInput

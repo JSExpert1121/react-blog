@@ -1,62 +1,75 @@
 import RestClient from './base'
 
-const BASE_URL = process.env.REACT_APP_SERVICE_BASE_URL + '/profile'
+const PROFILE_BASE_URL = process.env.REACT_APP_SERVICE_BASE_URL + '/profile'
+const USER_BASE_URL = process.env.REACT_APP_SERVICE_BASE_URL + '/user'
 
 export default {
+    updateUsername: (token, first_name, last_name) => RestClient.authPost(
+        `${USER_BASE_URL}`,
+        token,
+        { first_name, last_name }
+    ),
+
+    changePassword: (token, oldPassword, newPassword) => RestClient.authPost(
+        `${USER_BASE_URL}/changepass`,
+        token,
+        { oldPassword, newPassword }
+    ),
+
     getProfile: token => RestClient.authGet(
-        `${BASE_URL}`,
+        `${PROFILE_BASE_URL}`,
         token
     ),
 
     updateProfile: (token, data) => RestClient.authPut(
-        `${BASE_URL}`,
+        `${PROFILE_BASE_URL}`,
         token,
         data
     ),
 
     requestCode: (token, phone) => RestClient.authPost(
-        `${BASE_URL}/sendcode`,
+        `${PROFILE_BASE_URL}/sendcode`,
         token,
         { phone }
     ),
 
     verifyPhone: (token, code) => RestClient.authPost(
-        `${BASE_URL}/phoneverify`,
+        `${PROFILE_BASE_URL}/phoneverify`,
         token,
         { code }
     ),
 
     addEducation: (token, data) => RestClient.authPost(
-        `${BASE_URL}/education`,
+        `${PROFILE_BASE_URL}/education`,
         token,
         data
     ),
 
     addWork: (token, data) => RestClient.authPost(
-        `${BASE_URL}/work`,
+        `${PROFILE_BASE_URL}/work`,
         token,
         data
     ),
 
     updateEducation: (id, token, data) => RestClient.authPost(
-        `${BASE_URL}/education/${id}`,
+        `${PROFILE_BASE_URL}/education/${id}`,
         token,
         data
     ),
 
     updateWork: (id, token, data) => RestClient.authPost(
-        `${BASE_URL}/work/${id}`,
+        `${PROFILE_BASE_URL}/work/${id}`,
         token,
         data
     ),
 
     deleteEducation: (id, token) => RestClient.authDelete(
-        `${BASE_URL}/education/${id}`,
+        `${PROFILE_BASE_URL}/education/${id}`,
         token
     ),
 
     deleteWork: (id, token) => RestClient.authDelete(
-        `${BASE_URL}/work/${id}`,
+        `${PROFILE_BASE_URL}/work/${id}`,
         token
     )
 }

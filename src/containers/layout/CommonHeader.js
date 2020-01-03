@@ -10,8 +10,12 @@ const CommonHeader = () => {
 
     const user = useSelector(state => state.user, shallowEqual)
     const dispatch = useDispatch()
-    const logout = React.useCallback(() => {
-        dispatch(UserActions.logout(user.token))
+    const logout = React.useCallback(async () => {
+        try {
+            dispatch(UserActions.logout(user.token))
+        } catch (error) {
+            console.log(error)
+        }
     }, [dispatch, user.token])
 
     return (
