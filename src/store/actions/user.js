@@ -61,35 +61,35 @@ export const updateProfile = (token, data) => async dispatch => {
 export const addEducation = (token, data) => async dispatch => {
     await UserApis.addEducation(token, data)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }
 
 export const addWork = (token, data) => async dispatch => {
     await UserApis.addWork(token, data)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }
 
 export const updateEducation = (id, token, data) => async dispatch => {
     await UserApis.updateEducation(id, token, data)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }
 
 export const updateWork = (id, token, data) => async dispatch => {
     await UserApis.updateWork(id, token, data)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }
 
 export const deleteEducation = (id, token) => async dispatch => {
     await UserApis.deleteEducation(id, token)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }
 
 export const deleteWork = (id, token) => async dispatch => {
     await UserApis.deleteWork(id, token)
     const result = await UserApis.getProfile(token)
-    dispatch(gotProfile(result))
+    dispatch(gotProfile(result.profile))
 }

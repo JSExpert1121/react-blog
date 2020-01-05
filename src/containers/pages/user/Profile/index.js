@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Switch, Redirect, useRouteMatch, useLocation, Link } from 'react-router-dom'
 
 import GeneralPage from './General'
+import EducationPage from './Education'
+import HistoryPage from './History'
 
 const PAGES = [
     { label: 'General', path: 'general', component: GeneralPage },
@@ -44,10 +46,10 @@ const ProfilePage = () => {
                     <GeneralPage />
                 </Route>
                 <Route path={`${match.url}/employment`}>
-                    <GeneralPage />
+                    <HistoryPage />
                 </Route>
                 <Route path={`${match.url}/education`}>
-                    <GeneralPage />
+                    <EducationPage />
                 </Route>
                 <Redirect to={`${match.url}/general`} />
             </Switch>
