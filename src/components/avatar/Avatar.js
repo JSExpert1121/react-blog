@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Avatar = ({ avatar, name }) => {
+const Avatar = ({ avatar, name, size }) => {
 
     const shortName = React.useMemo(() => {
         const arr = name.split(' ')
@@ -9,7 +9,7 @@ const Avatar = ({ avatar, name }) => {
 
     return (
         <>
-            {!!avatar && <img src={avatar} alt={name} width={40} height={40} className='my-auto rounded-circle' />}
+            {!!avatar && <img src={avatar} alt={name} width={size} height={size} className='my-auto rounded-circle' />}
             {!avatar && (
                 <h4
                     className='rounded-circle bg-info text-center'
@@ -20,6 +20,10 @@ const Avatar = ({ avatar, name }) => {
             )}
         </>
     )
+}
+
+Avatar.defaultProps = {
+    size: 40
 }
 
 

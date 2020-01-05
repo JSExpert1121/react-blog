@@ -1,35 +1,31 @@
 import React from 'react'
 
+import PhoneInput2 from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
 const PhoneInput = props => {
     const { prefix, phone, setPhone, error, ...rest } = props;
 
     const cls = (error) ? 'form-control border border-danger' : 'form-control'
     return (
-        <div className='form-group row'>
-            <label
-                htmlFor={`${prefix}-phone`}
-                className='col-sm-3 col-form-label'
+        <div className='form-group'>
+            <PhoneInput2
+                value={phone}
+                onChange={setPhone}
+                country={'cn'}
+                className={cls}
+                aria-describedby={`${prefix}-phone-help`}
+                id={`${prefix}-phone`}
+                {...rest}
+                inputProps={{ style: { width: '100%', height: 38 } }}
+            />
+            <small
+                id={`${prefix}-phone-help`}
+                className='form-text text-danger'
+                style={{ visibility: error ? 'visible' : 'hidden' }}
             >
-                Phone No
-            </label>
-            <div className='col-sm-9'>
-                <input
-                    type='tel'
-                    className={cls}
-                    aria-describedby={`${prefix}-phone-help`}
-                    id={`${prefix}-phone`}
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    {...rest}
-                />
-                <small
-                    id={`${prefix}-phone-help`}
-                    className='form-text text-danger'
-                    style={{ visibility: error ? 'visible' : 'hidden' }}
-                >
-                    {error}
-                </small>
-            </div>
+                {error}
+            </small>
         </div>
     )
 }
