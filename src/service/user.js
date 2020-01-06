@@ -16,6 +16,18 @@ export default {
         { oldPassword, newPassword }
     ),
 
+    uploadAvatar: (token, image) => {
+        const formData = new FormData()
+        formData.append('file', image)
+
+        return RestClient.authPost(
+            `${PROFILE_BASE_URL}/avatar`,
+            token,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
+    },
+
     getProfile: token => RestClient.authGet(
         `${PROFILE_BASE_URL}`,
         token
