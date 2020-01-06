@@ -53,6 +53,12 @@ export const getProfile = token => async dispatch => {
     dispatch(gotProfile(data.profile))
 }
 
+export const uploadAvatar = (token, image) => async dispatch => {
+    await UserApis.uploadAvatar(token, image)
+    const result = await UserApis.getProfile(token)
+    dispatch(gotProfile(result.profile))
+}
+
 export const updateProfile = (token, data) => async dispatch => {
     const result = await UserApis.updateProfile(token, data)
     dispatch(gotProfile(result.profile))

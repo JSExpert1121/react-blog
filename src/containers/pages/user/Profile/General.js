@@ -9,6 +9,7 @@ import 'easymde/dist/easymde.min.css'
 // components
 import VerifiedPhoneInput from 'components/form/VerifiedPhoneInput'
 import Avatar from 'components/avatar/Avatar'
+import ImageUploadDialog from 'components/dialogs/ImageUploadDialog'
 
 import * as UserActions from 'store/actions/user'
 import UserApis from 'service/user'
@@ -145,6 +146,26 @@ const GeneralProfile = () => {
         return result
     }, [user.token, busy])
 
+    // edit avatar
+    const saveAvatar = React.useCallback(async image => {
+        if (busy) return
+
+        setBusy(true)
+        try {
+            await dispatch(UserActions.uploadAvatar(user.token, image))
+            toast.success('Avatar uploaded', { className: 'p-4' })
+        } catch (err) {
+            const error = err.data
+            if (error.errors) {
+                setError(error.errors)
+            } else {
+                setError('Unknown Error')
+            }
+        } finally {
+            setBusy(false)
+        }
+    }, [busy, dispatch, user.token])
+
 
     return (
         <>
@@ -162,6 +183,7 @@ const GeneralProfile = () => {
                         avatar={user.profile ? user.profile.avatar : ''}
                         name={user.user.username}
                         size={96}
+                        editable
                     />
                     <div className='profile-bio-desc d-flex flex-column justify-content-around ml-3'>
                         <h4 className='text-dark'>
@@ -293,7 +315,16 @@ const GeneralProfile = () => {
                         Update
                     </button>
                 </div>
+
             </form>
+
+            {/* modal dialog */}
+            <ImageUploadDialog
+                imageUrl={user.profile ? user.profile.avatar : ''}
+                handleSave={saveAvatar}
+                name={user.user.username}
+                message='Upload your avatar'
+            />
         </>
     )
 }
