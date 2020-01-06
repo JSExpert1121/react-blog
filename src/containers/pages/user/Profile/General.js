@@ -19,10 +19,13 @@ import '../user.scss'
 const GeneralProfile = () => {
 
     const user = useSelector(state => state.user, shallowEqual)
+    const dispatch = useDispatch()
 
+    // title and description
     const [title, setTitle] = React.useState(user.profile ? user.profile.title || '' : '')
     const [desc, setDesc] = React.useState(user.profile ? user.profile.description || '' : '')
 
+    // address
     const [address1, setAddr1] = React.useState(user.profile ? user.profile.address1 || '' : '')
     const [address2, setAddr2] = React.useState(user.profile ? user.profile.address2 || '' : '')
     const [city, setCity] = React.useState(user.profile ? user.profile.city || '' : '')
@@ -30,10 +33,10 @@ const GeneralProfile = () => {
     const [state, setState] = React.useState(user.profile ? user.profile.state || '' : '')
     const [country, setCountry] = React.useState(user.profile ? user.profile.country || '' : '')
 
+    // activity
     const [error, setError] = React.useState('')
     const [busy, setBusy] = React.useState(false)
 
-    const dispatch = useDispatch()
 
     const handleSubmit = React.useCallback(async e => {
         e.preventDefault()
@@ -62,7 +65,6 @@ const GeneralProfile = () => {
     }, [busy, dispatch, user.token, title, zip, city, state, address1, address2, country, desc])
 
 
-    // title
     React.useEffect(() => {
         setTitle(user.profile ? user.profile.title || '' : '')
         setDesc(user.profile ? user.profile.description || '' : '')
@@ -74,6 +76,7 @@ const GeneralProfile = () => {
         setCountry(user.profile ? user.profile.country || '' : '')
     }, [user.profile])
 
+    // title
     const changeTitle = React.useCallback(e => {
         setTitle(e.target.value)
     }, [])
