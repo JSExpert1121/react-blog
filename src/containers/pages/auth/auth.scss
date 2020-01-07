@@ -1,6 +1,6 @@
 @import 'assets/sass/index';
 
-.login-form {
+.login-form, .auth-form {
     width: 480px;
 
     .signin-button {
@@ -10,4 +10,12 @@
 
 .lock {
     color: $color-text-color-gray;
+}
+
+.busy {
+    position: fixed !important;
+    width: 32px;
+    height: 32px;
+    left: 48%;
+    top: 20%;
 }

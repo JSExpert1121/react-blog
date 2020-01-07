@@ -27,9 +27,9 @@ export default {
         { headers: { 'Content-Type': 'application/json' } }
     ),
 
-    resetPassword: (secToken, email) => RestClient.post(
+    resetPassword: (secToken, password) => RestClient.post(
         `${BASE_URL}/reset`,
-        { secToken, email },
+        { secToken, password },
         { headers: { 'Content-Type': 'application/json' } }
     ),
 

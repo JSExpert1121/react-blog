@@ -1,8 +1,10 @@
 import React from 'react'
 
 // 3rd party
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
+
+import Avatar from 'components/avatar/Avatar'
 
 const ImageUploadDialog = props => {
 
@@ -25,7 +27,9 @@ const ImageUploadDialog = props => {
         imageRef.current = null
         fileRef.current = null
         croppedRef.current = null
-    }, [])
+        setStatus('ready')
+        setURL(imageUrl)
+    }, [imageUrl])
 
     const handleFileOpened = React.useCallback(e => {
         const reader = new FileReader()
@@ -93,6 +97,9 @@ const ImageUploadDialog = props => {
         setCrop(crop)
     }, [])
 
+    const onSave = React.useCallback(() => {
+        handleSave(croppedRef.current)
+    }, [handleSave])
 
     return (
         <div className='modal fade' id='image-upload-dialog' tabIndex='-1' role='dialog' aria-labelledby='exampleModalCenterTitle' aria-hidden='true'>
@@ -137,22 +144,7 @@ const ImageUploadDialog = props => {
                                 />
                             )}
                             {!url && (
-                                <div
-                                    id='image-upload-dialog-preview-box'
-                                    style={{
-                                        width: 240,
-                                        height: 240,
-                                        backgroundColor: '#AAA',
-                                        color: '#EEE',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    <span style={{ fontSize: 32, color: 'white' }}>
-                                        {name.slice(0, 1).toUpperCase()}
-                                    </span>
-                                </div>
+                                <Avatar name={name} size={240} />
                             )}
                         </div>
                         <div id='image-upload-dialog-upload'>
@@ -174,7 +166,7 @@ const ImageUploadDialog = props => {
                     </div>
                     <div className='modal-footer'>
                         <button type='button' className='btn btn-secondary' data-dismiss='modal'>Close</button>
-                        <button type='button' className='btn btn-primary' data-dismiss='modal' onClick={() => handleSave(croppedRef.current)}>Save changes</button>
+                        <button type='button' className='btn btn-primary' data-dismiss='modal' onClick={onSave}>Save changes</button>
                     </div>
                 </div>
             </div>
