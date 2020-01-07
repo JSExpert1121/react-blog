@@ -1,6 +1,7 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
+import tokenHelper from './actions/token'
 
 const loadState = () => {
     try {
@@ -32,6 +33,10 @@ export default function configureStore() {
         peristedState,
         storeEnhancers(applyMiddleware(thunk))
     );
+
+    if (peristedState.user) {
+        tokenHelper.setToken(store.dispatch, peristedState.user.token, peristedState.user.refresh_token, peristedState.user.tokenTime)
+    }
 
     store.subscribe(() => {
         saveState(store.getState());

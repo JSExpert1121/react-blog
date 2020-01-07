@@ -4,8 +4,11 @@ const initState = {
     user: null,
     profile: null,
     token: null,
-    refresh_token: null
+    refresh_token: null,
+    tokenTime: null
 }
+
+
 
 const userReducer = (state = initState, action) => {
     const payload = action.payload
@@ -16,7 +19,8 @@ const userReducer = (state = initState, action) => {
                 ...state,
                 user: payload.user,
                 token: payload.access_token,
-                refresh_token: payload.refresh_token
+                refresh_token: payload.refresh_token,
+                tokenTime: parseInt(Date.now() / 1000)
             }
         case ActionTypes.USER_GET_SETTING_SUCCESS:
             return {
@@ -27,7 +31,8 @@ const userReducer = (state = initState, action) => {
             return {
                 ...state,
                 token: payload.access_token,
-                refresh_token: payload.refresh_token
+                refresh_token: payload.refresh_token,
+                tokenTime: parseInt(Date.now() / 1000)
             }
         case ActionTypes.AUTH_LOGOUT_SUCCESS:
             return {
