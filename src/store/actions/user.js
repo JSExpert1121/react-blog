@@ -1,6 +1,7 @@
 import * as ActionTypes from '../constants'
 import AuthApis from 'service/auth'
 import UserApis from 'service/user'
+import tokenHelper from './token'
 
 const loginSuccess = (data) => ({
     type: ActionTypes.AUTH_LOGIN_SUCCESS,
@@ -17,7 +18,7 @@ const refreshSuccess = data => ({
     payload: data
 })
 
-const logoutSuccess = () => ({
+export const logoutSuccess = () => ({
     type: ActionTypes.AUTH_LOGOUT_SUCCESS
 })
 
@@ -29,17 +30,21 @@ const gotProfile = data => ({
 export const login = (email, password) => async dispatch => {
     const data = await AuthApis.login(email, password)
     dispatch(loginSuccess(data))
+    tokenHelper.setToken(dispatch, data.access_token, data.refresh_token)
+
     const result = await UserApis.getProfile(data.access_token)
     dispatch(gotProfile(result.profile))
 }
 
-export const refreshToken = (token, refreshToken) => async dispatch => {
-    const data = await AuthApis.refreshToken(token, refreshToken)
+export const refreshToken = (accToken, refToken) => async dispatch => {
+    const data = await AuthApis.refreshToken(accToken, refToken)
+    tokenHelper.setToken(dispatch, data.access_token, data.refresh_token)
     dispatch(refreshSuccess(data))
 }
 
 export const logout = token => async dispatch => {
     await AuthApis.logout(token)
+    tokenHelper.clear()
     dispatch(logoutSuccess())
 }
 

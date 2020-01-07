@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation, Redirect } from 'react-router-dom'
+import { useLocation, Redirect, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import EmailInput from 'components/form/EmailInput'
@@ -122,6 +122,21 @@ const Login = () => {
                             </>
                         ) : 'Sign in'}
                     </button>
+                </div>
+
+                <div className='form-group row justify-content-between'>
+                    <Link
+                        className='my-2 btn btn-link'
+                        to='/auth/forgotpassword'
+                    >
+                        Forgot password?
+                    </Link>
+                    <Link
+                        className='my-2 btn btn-link'
+                        to='/auth/signup'
+                    >
+                        Sign up
+                    </Link>
                 </div>
             </form>
 

@@ -1,0 +1,17 @@
+.avatar-body {
+    position: relative;
+
+    .avatar-edit {
+        display: inline-flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #AAAA;
+        opacity: 0;
+    }
+
+    &:hover .avatar-edit {
+        opacity: 1;
+        transition: opacity linear 0.3s;
+    }
+}
