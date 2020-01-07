@@ -1,20 +1,13 @@
 import React from 'react'
 
+import './avatar.scss'
+
 const Avatar = ({ avatar, name, size, editable }) => {
 
-    const [hover, setHover] = React.useState(false)
     const shortName = React.useMemo(() => {
         const arr = name.split(' ')
-        return arr.map(item => item.slice(0, 1)).join('')
+        return arr.map(item => item.slice(0, 1)).join('').toUpperCase()
     }, [name])
-
-    const onMouseEnter = React.useCallback(e => {
-        setHover(true)
-    }, [])
-
-    const onMouseLeave = React.useCallback(e => {
-        setHover(false)
-    }, [])
 
     const onEdit = React.useCallback(e => {
         e.preventDefault()
@@ -22,10 +15,8 @@ const Avatar = ({ avatar, name, size, editable }) => {
 
     return (
         <div
-            className='rounded-circle position-relative'
+            className='rounded-circle avatar-body'
             style={{ width: size, height: size }}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
         >
             {!!avatar && (
                 <img
@@ -38,13 +29,14 @@ const Avatar = ({ avatar, name, size, editable }) => {
             )}
             {!avatar && (
                 <h4
-                    className='rounded-circle bg-info text-center'
+                    className='rounded-circle bg-info w-100 h-100 text-center'
                     style={{
                         width: size,
                         height: size,
                         color: '#EEE',
                         letterSpacing: 2,
-                        lineHeight: 2,
+                        fontSize: size / 3,
+                        lineHeight: 3,
                         margin: 0
                     }}
                 >
@@ -53,14 +45,10 @@ const Avatar = ({ avatar, name, size, editable }) => {
             )}
             {editable && (
                 <div
-                    className='rounded-circle position-absolute justify-content-center align-items-center'
+                    className='rounded-circle justify-content-center align-items-center avatar-edit'
                     style={{
-                        display: hover ? 'inline-flex' : 'none',
-                        backgroundColor: '#AAAA',
                         width: size,
                         height: size,
-                        left: 0,
-                        right: 0
                     }}
                 >
                     <button

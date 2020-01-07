@@ -17,7 +17,7 @@ const refreshSuccess = data => ({
     payload: data
 })
 
-const logoutSuccess = () => ({
+export const logoutSuccess = () => ({
     type: ActionTypes.AUTH_LOGOUT_SUCCESS
 })
 
