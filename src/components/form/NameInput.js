@@ -9,9 +9,11 @@ const NameInput = props => {
     return (
         <div className='form-group row'>
             <div className='col'>
+                <label htmlFor={`${prefix}-name1`}>First Name</label>
                 <input
                     type='text'
                     className={cls1}
+                    placeholder='First Name'
                     aria-describedby={`${prefix}-name1-help`}
                     id={`${prefix}-name1`}
                     value={name1}
@@ -27,9 +29,11 @@ const NameInput = props => {
                 </small>
             </div>
             <div className='col'>
+                <label htmlFor={`${prefix}-name2`}>Last Name</label>
                 <input
                     type='text'
                     className={cls2}
+                    placeholder='Last Name'
                     aria-describedby={`${prefix}-name2-help`}
                     id={`${prefix}-name2`}
                     value={name2}
