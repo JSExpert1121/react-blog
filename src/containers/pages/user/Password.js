@@ -57,17 +57,17 @@ const PasswordPage = props => {
         setBusy(true)
         try {
             await UserApis.changePassword(user.token, oldPass, pass1)
-            setBusy(false)
             setError('')
             toast.success('Password changed', { className: 'p-4' })
         } catch (err) {
             const error = err.data
-            setBusy(false)
-            if (error.errors) {
-                setError(JSON.stringify(error.errors))
+            if (error.errors && typeof error.errors === 'string') {
+                setError(error.errors)
             } else {
                 setError('Unknown Error')
             }
+        } finally {
+            setBusy(false)
         }
     }, [busy, oldPass, pass1, user.token])
 

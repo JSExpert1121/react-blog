@@ -12,7 +12,6 @@ const authConfig = (config, token) => ({
     }
 })
 
-
 export default {
     get: (url, config = {}) =>
         Axios.get(url, config).then(res => res.data),
