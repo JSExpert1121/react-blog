@@ -38,7 +38,6 @@ const BlogsPage = () => {
 
     React.useEffect(() => {
         getBlogs(1, 10)
-        console.log('get blogs')
     }, [])
 
     if (error) {

@@ -3,6 +3,7 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import CommonLayout from 'containers/layout/Common'
 import BlogsPage from './BlogsPage'
+import BlogDetail from './BlogDetail'
 
 const BlogPage = () => {
 
@@ -10,11 +11,11 @@ const BlogPage = () => {
     return (
         <CommonLayout>
             <Switch>
-                <Route exact to={`${match.url}/`}>
-                    <BlogsPage />
+                <Route path={`${match.url}blog/:id`}>
+                    <BlogDetail />
                 </Route>
-                <Route to={`${match.url}/:id`}>
-                    Blog detail
+                <Route exact path={`${match.url}`}>
+                    <BlogsPage />
                 </Route>
             </Switch>
         </CommonLayout>
