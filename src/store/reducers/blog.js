@@ -30,7 +30,7 @@ const blogReducer = (state = initState, action) => {
         case ActionTypes.BLOG_GET_DETAIL_SUCCESS:
             return {
                 ...state,
-                detail: payload
+                current: payload.data
             }
         case ActionTypes.BLOG_SET_SEARCH_KEY:
             return {

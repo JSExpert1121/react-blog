@@ -5,13 +5,6 @@
     padding: 8px;
     background-color: white;
 
-    .busy {
-        position: fixed !important;
-        width: 32px;
-        height: 32px;
-        left: 48%;
-        top: 20%;
-    }
 
     .blog-item {
         display: flex;
@@ -22,6 +15,7 @@
     
         .blog-title {
             color: #111;
+            font-size: 1.125rem;
         }
 
         .blog-abstract {
@@ -48,6 +42,10 @@
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
+
+                .blog-actions button {
+                    font-size: 0.8755rem;
+                }
             }
 
             .blog-author {
@@ -80,3 +78,10 @@
     }
 }
 
+.busy {
+    position: fixed !important;
+    width: 32px;
+    height: 32px;
+    left: 48%;
+    top: 20%;
+}

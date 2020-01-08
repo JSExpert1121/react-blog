@@ -10,19 +10,20 @@ const Num2String = num => {
     }
 }
 
-const IconText = ({ type, data, handleClick }) => {
-    return (
-        <span className='mr-4 text-secondary'>
-            <i
-                className={type + ' mr-2'}
-                onClick={handleClick}
-                style={{ cursor: 'pointer', width: 14, height: 14 }}
-            />
-            <span style={{ fontSize: 14 }}>
-                {Num2String(data)}
-            </span>
+const IconText = ({ type, data, handleClick }) => (
+    <span
+        className='mr-4 text-secondary my-auto'
+        style={{ cursor: 'pointer' }}
+        onClick={handleClick}
+    >
+        <i
+            className={type + ' mr-2'}
+            style={{ width: 14, height: 14 }}
+        />
+        <span style={{ fontSize: 14 }}>
+            {Num2String(data)}
         </span>
-    )
-}
+    </span>
+)
 
 export default IconText

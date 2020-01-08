@@ -5,7 +5,7 @@ const Tag = ({ name, handleClick }) => {
     const onClick = React.useCallback(e => {
         e.preventDefault()
         handleClick && handleClick(name)
-    }, [])
+    }, [handleClick, name])
 
     return (
         <div
