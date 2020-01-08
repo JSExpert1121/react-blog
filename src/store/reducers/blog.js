@@ -1,6 +1,7 @@
 import * as ActionTypes from '../constants'
 
 const initState = {
+    count: 0,
     blogs: [],
     current: null,
     keys: [],
@@ -16,11 +17,15 @@ const blogReducer = (state = initState, action) => {
     const payload = action.payload
 
     switch (action.type) {
+        case ActionTypes.BLOG_GET_COUNT_SUCCESS:
+            return {
+                ...state,
+                count: payload
+            }
         case ActionTypes.BLOG_GET_LIST_SUCCESS:
             return {
                 ...state,
                 blogs: payload.data,
-                blogCount: payload.count
             }
         case ActionTypes.BLOG_GET_DETAIL_SUCCESS:
             return {

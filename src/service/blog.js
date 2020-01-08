@@ -11,6 +11,8 @@ export default {
         }
     ),
 
+    getCount: () => RestClient.get(`${BASE_URL}/count`),
+
     getDetail: id => RestClient.get(
         `${BASE_URL}/${id}`
     ),

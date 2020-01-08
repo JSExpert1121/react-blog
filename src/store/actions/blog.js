@@ -21,6 +21,11 @@ export const setSortOrder = ascend => ({
     payload: ascend
 })
 
+export const gotBlogCount = count => ({
+    type: ActionTypes.BLOG_GET_COUNT_SUCCESS,
+    payload: count
+})
+
 export const gotBlogList = data => ({
     type: ActionTypes.BLOG_GET_LIST_SUCCESS,
     payload: data
@@ -31,9 +36,14 @@ export const gotBlogDetail = data => ({
     payload: data
 })
 
+export const getCount = () => async dispatch => {
+    const { count } = await BlogApis.getCount()
+    dispatch(gotBlogCount(count))
+}
+
 export const getBlogs = options => async dispatch => {
-    const { count, data } = await BlogApis.get(options)
-    dispatch(gotBlogList({ count, data }))
+    const { data } = await BlogApis.get(options)
+    dispatch(gotBlogList({ data }))
 }
 
 export const getBlogDetail = id => async dispatch => {
