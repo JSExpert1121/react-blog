@@ -62,14 +62,14 @@ export const getBlogDetail = id => async dispatch => {
 
 export const postBlog = (token, data) => async dispatch => {
     const { blog } = await BlogApis.postBlog(token, data)
-    dispatch(gotBlogDetail({ data: blog }))
-    return blog._id
+    dispatch(getBlogDetail(blog))
+    return blog
 }
 
 export const updateBlog = (id, token, data) => async dispatch => {
     const { blog } = await BlogApis.updateBlog(id, token, data)
-    dispatch(gotBlogDetail({ data: blog }))
-    return blog._id
+    dispatch(getBlogDetail(blog))
+    return blog
 }
 
 export const addComment = (id, token, content) => async dispatch => {

@@ -1,5 +1,8 @@
 import React from 'react'
 
+// 3rd party libraries
+import Markdown from 'react-markdown'
+
 // custom components
 import Tag from 'components/blog/Tag'
 import IconText from 'components/blog/IconText'
@@ -27,6 +30,8 @@ const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
         console.log('Claps clicked')
     }, [])
 
+    const desc = React.useMemo(() => description.replace(/\n/g, '\n\n'), [description])
+
     return (
         <article className='blog-detail-item py-2 px-3 d-flex flex-column'>
             {cover && (
@@ -42,7 +47,7 @@ const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
                     {title}
                 </h3>
             </div>
-            <div className='abstract'>
+            <div className='abstract mx-3'>
                 <small className='short text-dark flex-grow-1'>
                     {short}
                 </small>
@@ -53,9 +58,11 @@ const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
                 </div>
             </div>
             <div className='body'>
-                <p className='text-dark my-2'>
+                <Markdown source={desc} className='text-dark my-2 mx-3' />
+
+                {/* <p className='text-dark my-2 mx-3'>
                     {description}
-                </p>
+                </p> */}
             </div>
             <div className='footer mr-4'>
                 <div className='footer-left'>
@@ -102,8 +109,8 @@ const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
                     </div>
                 </div>
             </div>
-            <div className='comments px-1'>
-                <hr />
+            <hr />
+            <div className='comments pl-3 pr-1'>
                 {comments.map(comment => (
                     <Comment
                         key={comment._id}

@@ -58,7 +58,7 @@ const BlogPost = props => {
             if (update && !detail) {
                 await dispatch(BlogActions.getBlogDetail(params?.id))
             }
-            allTags || await dispatch(BlogActions.getTags())
+            allTags.length > 0 || await dispatch(BlogActions.getTags())
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -130,8 +130,8 @@ const BlogPost = props => {
     }, [history])
 
     const submitable = React.useMemo(() => {
-        return tags.length > 0 && title.length > 0 && desc.length > 0
-    }, [tags.length, title.length, desc.length])
+        return tags && tags.length > 0 && title.length > 0 && desc.length > 0
+    }, [tags, title.length, desc.length])
 
     // return
     if (Redir) return Redir
