@@ -39,6 +39,7 @@ export const gotBlogDetail = data => ({
 export const getCount = () => async dispatch => {
     const { count } = await BlogApis.getCount()
     dispatch(gotBlogCount(count))
+    return count
 }
 
 export const getBlogs = options => async dispatch => {
@@ -64,12 +65,15 @@ export const updateBlog = (id, token, data) => async dispatch => {
 
 export const addComment = (id, token, content) => async dispatch => {
     await BlogApis.addComment(id, token, content)
-    const data = await BlogApis.getBlogDetail(id)
-    dispatch(gotBlogDetail(data))
+    dispatch(getBlogDetail(id))
 }
 
 export const updateComment = (id, commentId, token, content) => async dispatch => {
     await BlogApis.updateComment(id, commentId, token, content)
-    const data = await BlogApis.getBlogDetail(id)
-    dispatch(gotBlogDetail(data))
+    dispatch(getBlogDetail(id))
+}
+
+export const deleteComment = (id, commentId, token) => async dispatch => {
+    await BlogApis.deleteComment(id, commentId, token)
+    dispatch(getBlogDetail(id))
 }

@@ -3,7 +3,7 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import CommonLayout from 'containers/layout/Common'
 import BlogsPage from './BlogsPage'
-import BlogDetail from './BlogDetail'
+import BlogDetail from './BlogDetailPage'
 
 const BlogPage = () => {
 
@@ -15,7 +15,7 @@ const BlogPage = () => {
                     <BlogDetail />
                 </Route>
                 <Route exact path={`${match.url}`}>
-                    <BlogsPage />
+                    <BlogsPage test='test' />
                 </Route>
             </Switch>
         </CommonLayout>

@@ -1,0 +1,19 @@
+.comment {
+    position: relative;
+
+    .edit {
+        margin-left: 8px;
+        display: none;
+
+        .fa {
+            cursor: pointer;
+            color: #666;
+        }
+    }
+
+    &:hover {
+        .edit {
+            display: inline-flex;
+        }
+    }
+}

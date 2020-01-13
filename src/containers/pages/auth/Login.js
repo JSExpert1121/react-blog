@@ -9,6 +9,7 @@ import * as validators from 'helper/validators'
 
 import * as UserActions from 'store/actions/user'
 
+import LoginImage from 'assets/images/login.png'
 import './auth.scss'
 
 const emailValidators = [
@@ -69,8 +70,8 @@ const Login = () => {
 
     return (
         <section className='d-flex flex-column shadow-sm p-5 bg-white rounded'>
-            <div className='row my-5 mx-auto'>
-                <i className='fa fa-lock fa-6x lock' aria-hidden="true" />
+            <div className='row my-4 mx-auto'>
+                <img src={LoginImage} alt='Login' width={120} />
             </div>
             <form className='login-form'>
 
