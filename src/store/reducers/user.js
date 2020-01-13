@@ -9,7 +9,6 @@ const initState = {
 }
 
 
-
 const userReducer = (state = initState, action) => {
     const payload = action.payload
 

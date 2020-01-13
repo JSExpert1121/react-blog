@@ -1,19 +1,26 @@
 import React from 'react'
-import { useParams, useLocation, Redirect } from 'react-router-dom'
+import { useParams, useLocation, Redirect, useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 
+// 3rd party libraries
 import { toast } from 'react-toastify'
 
+// custom components & helpers
 import * as BlogActions from 'store/actions/blog'
-import './blogs.scss'
 import BlogDetailItem from './BlogDetailItem'
 import CommentForm from 'components/blog/CommentForm'
 import ConfirmDialog from 'components/dialogs/ConfirmDialog'
+import { getErrorString } from 'helper/error'
+import './blogs.scss'
+
+
 
 const BlogDetailPage = (props) => {
 
     const params = useParams()
     const location = useLocation()
+    const history = useHistory()
+    const match = useRouteMatch()
 
     const user = useSelector(state => state.user, shallowEqual)
     const author = useSelector(state => state.blog.current?.user)
@@ -36,12 +43,7 @@ const BlogDetailPage = (props) => {
         try {
             await dispatch(BlogActions.getBlogDetail(id))
         } catch (err) {
-            const error = err.data
-            if (error && error.errors && typeof error.errors === 'string') {
-                setError(error.errors)
-            } else {
-                setError('Unknown error: ', JSON.stringify(error))
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
         }
@@ -49,7 +51,8 @@ const BlogDetailPage = (props) => {
 
     React.useEffect(() => {
         getDetail(params.id)
-    }, [params.id])
+        // eslint-disable-next-line
+    }, [])
 
 
     // comment
@@ -79,39 +82,29 @@ const BlogDetailPage = (props) => {
 
         setBusy(true)
         try {
-            await dispatch(BlogActions.deleteComment(detail._id, comment._id, user.token))
+            await dispatch(BlogActions.deleteComment(detail?._id, comment._id, user.token))
             toast.success('Delete success', { className: 'p-4' })
         } catch (err) {
-            const error = err ? err.data : {}
-            if (error && error.errors && typeof error.errors === 'string') {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
         }
-    }, [detail._id, user.token, busy, dispatch])
+    }, [detail, user.token, busy, dispatch])
 
     const updateComment = React.useCallback(async (id, content) => {
         if (busy) return
 
         setBusy(true)
         try {
-            await dispatch(BlogActions.updateComment(detail._id, id, user.token, content))
+            await dispatch(BlogActions.updateComment(detail?._id, id, user.token, content))
             toast.success('Update success', { className: 'p-4' })
         } catch (err) {
-            const error = err ? err.data : {}
-            if (error && error.errors && typeof error.errors === 'string') {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
             setForm('')
         }
-    }, [detail._id, user.token, busy, dispatch])
+    }, [detail, user.token, busy, dispatch])
 
     const addComment = React.useCallback(async content => {
         if (busy) return
@@ -121,13 +114,7 @@ const BlogDetailPage = (props) => {
             await dispatch(BlogActions.addComment(detail._id, user.token, content))
             toast.success('Add success', { className: 'p-4' })
         } catch (err) {
-            alert(JSON.stringify(err.data))
-            const error = err ? err.data : {}
-            if (error && error.errors && typeof error.errors === 'string') {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
             setForm('')
@@ -139,8 +126,8 @@ const BlogDetailPage = (props) => {
     }, [])
 
     const updatePost = React.useCallback(e => {
-        console.log(detail)
-    }, [detail])
+        history.push(`${match.url}/edit`)
+    }, [history, match.url])
 
 
     // confirm dialog
@@ -182,11 +169,13 @@ const BlogDetailPage = (props) => {
                     role='status'
                 />
             )}
-            <BlogDetailItem
-                blog={detail}
-                updateComment={handleUpdateComment}
-                deleteComment={handleDeleteComment}
-            />
+            {detail && (
+                <BlogDetailItem
+                    blog={detail}
+                    updateComment={handleUpdateComment}
+                    deleteComment={handleDeleteComment}
+                />
+            )}
             <div className='px-3 py-1'>
                 {form === 'comment' && (
                     <CommentForm
@@ -201,7 +190,7 @@ const BlogDetailPage = (props) => {
                 <button className='btn btn-link' onClick={handleAddComment}>
                     Add a comment
                 </button>
-                {user?.user?.id === author._id && (
+                {(user?.user?.id === author?._id) && !!author && (
                     <button className='btn btn-link' onClick={updatePost}>Edit</button>
                 )}
             </div>

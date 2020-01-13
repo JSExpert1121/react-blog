@@ -10,7 +10,8 @@ const initState = {
         no: 0,
         size: 10
     },
-    ascend: true
+    ascend: true,
+    tags: []
 }
 
 const blogReducer = (state = initState, action) => {
@@ -51,6 +52,11 @@ const blogReducer = (state = initState, action) => {
             return {
                 ...state,
                 ascend: payload
+            }
+        case ActionTypes.BLOG_GET_TAGS_SUCCESS:
+            return {
+                ...state,
+                tags: payload
             }
         default:
             return state

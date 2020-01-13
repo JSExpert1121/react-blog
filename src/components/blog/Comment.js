@@ -24,7 +24,7 @@ const Comment = ({ comment, updateComment, deleteComment }) => {
             <span>&nbsp;-&nbsp;</span>
             <Tag name={`${user?.name?.first} ${user?.name?.last}`} />
             <span className='text-black-50'>{moment(createdAt).format('lll')}</span>
-            {curUser?.user?.id === user._id && (
+            {curUser?.user?.id === user?._id && user?._id && (
                 <div className='edit'>
                     <i className='fa fa-edit mr-2' onClick={handleUpdate} />
                     <i className='fa fa-trash' onClick={handleDelete} />
