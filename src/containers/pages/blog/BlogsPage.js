@@ -1,18 +1,26 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import BlogItem from './BlogItem'
 import * as BlogActions from 'store/actions/blog'
+import { getErrorString } from 'helper/error'
 
 import './blogs.scss'
 
-const BlogsPage = () => {
+const BlogsPage = props => {
 
     const [busy, setBusy] = React.useState(false)
     const [error, setError] = React.useState('')
     const dispatch = useDispatch()
+    const history = useHistory()
 
-    const blog = useSelector(state => state.blog)
+    const blogs = useSelector(state => state.blog.blogs)
+    const total = useSelector(state => state.blog.count)
+
+    const handlePost = React.useCallback(e => {
+        history.push('/blog/create')
+    }, [history])
 
     const getBlogs = React.useCallback(async (page, size) => {
         if (busy) return
@@ -25,12 +33,7 @@ const BlogsPage = () => {
                 pageSize: size
             }))
         } catch (err) {
-            const error = err.data
-            if (error.errors) {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
         }
@@ -38,10 +41,26 @@ const BlogsPage = () => {
 
     React.useEffect(() => {
         getBlogs(1, 10)
+        // eslint-disable-next-line
     }, [])
 
     if (error) {
-        return <div>{error}</div>
+        return (
+            <section className='container blog-container'>
+                {error}
+            </section>
+        )
+    }
+
+    if (busy) {
+        return (
+            <section className='container blog-container'>
+                <div
+                    className='spinner-border busy text-primary m-auto'
+                    role='status'
+                />
+            </section>
+        )
     }
 
     return (
@@ -53,7 +72,15 @@ const BlogsPage = () => {
                 />
             )}
 
-            {blog.blogs.map(blog => (
+            <div className='row'>
+                <h4 className='text-dark m-4 flex-grow-1'>
+                    {`Total: ${total} posts`}
+                </h4>
+                <button className='btn btn-primary mx-4 my-auto' onClick={handlePost}>
+                    Post a new
+                </button>
+            </div>
+            {blogs.map(blog => (
                 <BlogItem key={blog._id} blog={blog} />
             ))}
         </section>

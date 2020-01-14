@@ -3,6 +3,8 @@ import RestClient from './base'
 const BASE_URL = process.env.REACT_APP_SERVICE_BASE_URL + '/blogs'
 
 export default {
+    getTags: () => RestClient.get(`${BASE_URL}/tags`),
+
     get: options => RestClient.get(
         `${BASE_URL}`,
         {

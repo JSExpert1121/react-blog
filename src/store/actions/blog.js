@@ -36,9 +36,18 @@ export const gotBlogDetail = data => ({
     payload: data
 })
 
+export const getTags = () => async dispatch => {
+    const { tags } = await BlogApis.getTags()
+    dispatch({
+        type: ActionTypes.BLOG_GET_TAGS_SUCCESS,
+        payload: tags
+    })
+}
+
 export const getCount = () => async dispatch => {
     const { count } = await BlogApis.getCount()
     dispatch(gotBlogCount(count))
+    return count
 }
 
 export const getBlogs = options => async dispatch => {
@@ -52,24 +61,28 @@ export const getBlogDetail = id => async dispatch => {
 }
 
 export const postBlog = (token, data) => async dispatch => {
-    const { id } = await BlogApis.postBlog(token, data)
-    const result = await BlogApis.getDetail(id)
-    dispatch(gotBlogDetail(result))
+    const { blog } = await BlogApis.postBlog(token, data)
+    dispatch(getBlogDetail(blog))
+    return blog
 }
 
 export const updateBlog = (id, token, data) => async dispatch => {
-    const result = await BlogApis.updateBlog(id, token, data)
-    dispatch(gotBlogDetail(result))
+    const { blog } = await BlogApis.updateBlog(id, token, data)
+    dispatch(getBlogDetail(blog))
+    return blog
 }
 
 export const addComment = (id, token, content) => async dispatch => {
     await BlogApis.addComment(id, token, content)
-    const data = await BlogApis.getBlogDetail(id)
-    dispatch(gotBlogDetail(data))
+    dispatch(getBlogDetail(id))
 }
 
 export const updateComment = (id, commentId, token, content) => async dispatch => {
     await BlogApis.updateComment(id, commentId, token, content)
-    const data = await BlogApis.getBlogDetail(id)
-    dispatch(gotBlogDetail(data))
+    dispatch(getBlogDetail(id))
+}
+
+export const deleteComment = (id, commentId, token) => async dispatch => {
+    await BlogApis.deleteComment(id, commentId, token)
+    dispatch(getBlogDetail(id))
 }

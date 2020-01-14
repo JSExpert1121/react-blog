@@ -5,7 +5,7 @@ import tokenHelper from './actions/token'
 
 const loadState = () => {
     try {
-        const serializedState = localStorage.getItem('hit!t-state');
+        const serializedState = localStorage.getItem('miniblog-state');
         if (serializedState === null) {
             return {};
         }
@@ -19,7 +19,7 @@ const loadState = () => {
 const saveState = (state) => {
     try {
         const serializedState = JSON.stringify(state);
-        localStorage.setItem('hit!t-state', serializedState);
+        localStorage.setItem('miniblog-state', serializedState);
     } catch (error) {
         console.log('Local Storage: Save failed with code ', error);
     }

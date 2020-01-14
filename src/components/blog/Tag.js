@@ -9,7 +9,7 @@ const Tag = ({ name, handleClick }) => {
 
     return (
         <div
-            className='mx-2 my-1 px-2 py-1'
+            className='mx-2 my-1 px-2 py-1 d-inline'
             style={{
                 cursor: 'pointer',
                 backgroundColor: '#CEE0ED',

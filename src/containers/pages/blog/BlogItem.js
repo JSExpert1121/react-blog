@@ -10,60 +10,51 @@ import './blogs.scss'
 
 const BlogItem = ({ blog }) => {
 
-    const { user, cover, title, short, description, tags, likes, dislikes, claps, edited } = blog
+    const { user, cover, title, short, description, tags, likes, dislikes, claps } = blog
 
     const tagClick = React.useCallback(tag => {
         console.log(tag, ' clicked')
     }, [])
 
-    const handleLike = React.useCallback(e => {
-        console.log('Like clicked')
-    }, [])
-
-    const handleDislike = React.useCallback(e => {
-        console.log('Dislike clicked')
-    }, [])
-
-    const handleClaps = React.useCallback(e => {
-        console.log('Claps clicked')
-    }, [])
-
     return (
-        <div className='blog-item pb-4 pt-2 px-2 d-flex flex-column'>
-            {cover && <img src={cover} alt='cover' className='blog-cover' />}
-            <div className='blog-header d-flex'>
+        <article className='blog-item pb-4 pt-2 px-3 d-flex flex-column border-top'>
+            {cover && (
+                <div className='over-container'>
+                    <img src={cover} alt='cover' className='over' />
+                </div>
+            )}
+            <div className='header d-flex'>
                 <Link
-                    className='flex-grow-1 blog-title font-weight-bold'
+                    className='flex-grow-1 title font-weight-bold'
                     to={`/blog/${blog._id}`}
                 >
                     {title}
                 </Link>
             </div>
-            <div className='blog-abstract'>
-                <small className='blog-short text-dark flex-grow-1'>
+            <div className='abstract'>
+                <small className='short text-dark flex-grow-1'>
                     {short}
                 </small>
-                <div className='blog-likes-bar'>
-                    <IconText type='fa fa-thumbs-up' data={likes} handleClick={handleLike} />
-                    <IconText type='fa fa-thumbs-down' data={dislikes} handleClick={handleDislike} />
-                    <IconText type='fa fa-sign-language' data={claps} handleClick={handleClaps} />
+                <div className='likes-bar'>
+                    <IconText type='fa fa-thumbs-up' data={likes} />
+                    <IconText type='fa fa-thumbs-down' data={dislikes} />
+                    <IconText type='fa fa-sign-language' data={claps} />
                 </div>
             </div>
-            <div className='blog-body'>
+            <div className='body'>
                 <Ellipsis className='text-dark my-2' maxLines={2}>
                     {description}
                 </Ellipsis>
             </div>
-            <div className='blog-footer mr-4'>
-                <div className='blog-footer-left'>
-                    <div className='blog-tags'>
+            <div className='footer mr-4'>
+                <div className='footer-left'>
+                    <div className='tags'>
                         {tags && tags.map(tag => (
                             <Tag key={tag} name={tag} handleClick={tagClick} />
                         ))}
                     </div>
                 </div>
-                <div className='blog-author my-auto'>
-                    {edited && <p className='edited'>{`Updated at ${edited}`}</p>}
+                <div className='author my-auto'>
                     <div className='body'>
                         <img
                             src={user.profile.avatar}
@@ -77,7 +68,7 @@ const BlogItem = ({ blog }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     )
 }
 
