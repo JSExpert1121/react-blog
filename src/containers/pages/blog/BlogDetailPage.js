@@ -92,11 +92,11 @@ const BlogDetailPage = (props) => {
     }, [detail, user.token, busy, dispatch])
 
     const updateComment = React.useCallback(async (id, content) => {
-        if (busy) return
+        if (busy || !detail) return
 
         setBusy(true)
         try {
-            await dispatch(BlogActions.updateComment(detail?._id, id, user.token, content))
+            await dispatch(BlogActions.updateComment(detail._id, id, user.token, content))
             toast.success('Update success', { className: 'p-4' })
         } catch (err) {
             setError(getErrorString(err))
@@ -107,7 +107,7 @@ const BlogDetailPage = (props) => {
     }, [detail, user.token, busy, dispatch])
 
     const addComment = React.useCallback(async content => {
-        if (busy) return
+        if (busy || !detail) return
 
         setBusy(true)
         try {
@@ -120,6 +120,70 @@ const BlogDetailPage = (props) => {
             setForm('')
         }
     }, [busy, dispatch, detail, user.token])
+
+
+    // like, dislike, claps
+    const handleLike = React.useCallback(async blog => {
+        if (!user.user?.id) {
+            setRedir('/auth/login')
+            return
+        }
+
+        if (user.user?.id === author?._id || busy || !detail) return
+
+        const newObj = { ...blog }
+        newObj.likes++
+        setBusy(true)
+        try {
+            await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+        } catch (err) {
+            setError(getErrorString(err))
+        } finally {
+            setBusy(false)
+        }
+    }, [busy, user, author, dispatch, detail])
+
+    const handleDislike = React.useCallback(async blog => {
+        if (!user.user?.id) {
+            setRedir('/auth/login')
+            return
+        }
+
+        if (user.user?.id === author?._id || busy || !detail) return
+
+        const newObj = { ...blog }
+        newObj.dislikes++
+        setBusy(true)
+        try {
+            await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+        } catch (err) {
+            setError(getErrorString(err))
+        } finally {
+            setBusy(false)
+        }
+    }, [busy, user, author, dispatch, detail])
+
+    const handleClaps = React.useCallback(async blog => {
+        if (!user.user?.id) {
+            setRedir('/auth/login')
+            return
+        }
+
+        if (user.user?.id === author?._id || busy || !detail) return
+
+        const newObj = { ...blog }
+        newObj.claps++
+        setBusy(true)
+        try {
+            await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+        } catch (err) {
+            setError(getErrorString(err))
+        } finally {
+            setBusy(false)
+        }
+    }, [busy, user, author, dispatch, detail])
+
+
 
     const cancelComment = React.useCallback(() => {
         setForm('')
@@ -174,6 +238,9 @@ const BlogDetailPage = (props) => {
                     blog={detail}
                     updateComment={handleUpdateComment}
                     deleteComment={handleDeleteComment}
+                    handleLike={handleLike}
+                    handleDislike={handleDislike}
+                    handleClaps={handleClaps}
                 />
             )}
             <div className='px-3 py-1'>

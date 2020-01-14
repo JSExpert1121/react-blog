@@ -9,26 +9,33 @@ import IconText from 'components/blog/IconText'
 import Comment from 'components/blog/Comment'
 import './blogs.scss'
 
-const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
+const BlogDetailItem = ({
+    blog,
+    updateComment,
+    deleteComment,
+    handleLike,
+    handleDislike,
+    handleClaps
+}) => {
 
     const { user, cover, title, short, description, tags, likes, dislikes, claps, createdAt, comments } = blog
     const { name, profile } = user
 
-    const tagClick = React.useCallback(tag => {
+    const tagClick = React.useCallback(async tag => {
         console.log(tag, ' clicked')
     }, [])
 
-    const handleLike = React.useCallback(e => {
-        console.log('Like clicked')
-    }, [])
+    const onLike = React.useCallback(e => {
+        handleLike(blog)
+    }, [blog, handleLike])
 
-    const handleDislike = React.useCallback(e => {
-        console.log('Dislike clicked')
-    }, [])
+    const onDislike = React.useCallback(e => {
+        handleDislike(blog)
+    }, [blog, handleDislike])
 
-    const handleClaps = React.useCallback(e => {
-        console.log('Claps clicked')
-    }, [])
+    const onClaps = React.useCallback(e => {
+        handleClaps(blog)
+    }, [blog, handleClaps])
 
     const desc = React.useMemo(() => description.replace(/\n/g, '\n\n'), [description])
 
@@ -52,17 +59,13 @@ const BlogDetailItem = ({ blog, updateComment, deleteComment }) => {
                     {short}
                 </small>
                 <div className='likes-bar'>
-                    <IconText type='fa fa-thumbs-up' data={likes} handleClick={handleLike} />
-                    <IconText type='fa fa-thumbs-down' data={dislikes} handleClick={handleDislike} />
-                    <IconText type='fa fa-sign-language' data={claps} handleClick={handleClaps} />
+                    <IconText type='fa fa-thumbs-up' data={likes} handleClick={onLike} />
+                    <IconText type='fa fa-thumbs-down' data={dislikes} handleClick={onDislike} />
+                    <IconText type='fa fa-sign-language' data={claps} handleClick={onClaps} />
                 </div>
             </div>
             <div className='body'>
                 <Markdown source={desc} className='text-dark my-2 mx-3' />
-
-                {/* <p className='text-dark my-2 mx-3'>
-                    {description}
-                </p> */}
             </div>
             <div className='footer mr-4'>
                 <div className='footer-left'>

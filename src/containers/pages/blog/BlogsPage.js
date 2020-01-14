@@ -52,6 +52,17 @@ const BlogsPage = props => {
         )
     }
 
+    if (busy) {
+        return (
+            <section className='container blog-container'>
+                <div
+                    className='spinner-border busy text-primary m-auto'
+                    role='status'
+                />
+            </section>
+        )
+    }
+
     return (
         <section className='container blog-container'>
             {busy && (
