@@ -119,7 +119,6 @@ const BlogPost = props => {
             history.push(`/blog/${id}`)
         } catch (error) {
             setError(getErrorString(error))
-        } finally {
             setBusy(false)
         }
     }, [busy, update, user.token, title, short, tags, desc, detail, dispatch, history])

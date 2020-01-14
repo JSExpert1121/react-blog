@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
 import BlogItem from './BlogItem'
 import * as BlogActions from 'store/actions/blog'
@@ -15,8 +15,9 @@ const BlogsPage = props => {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const blogs = useSelector(state => state.blog.blogs)
-    const total = useSelector(state => state.blog.count)
+    const blogs = useSelector(state => state.blog.blogs, shallowEqual)
+    const total = useSelector(state => state.blog.count, shallowEqual)
+    const user = useSelector(state => state.user, shallowEqual)
 
     const handlePost = React.useCallback(e => {
         history.push('/blog/create')
@@ -76,9 +77,11 @@ const BlogsPage = props => {
                 <h4 className='text-dark m-4 flex-grow-1'>
                     {`Total: ${total} posts`}
                 </h4>
-                <button className='btn btn-primary mx-4 my-auto' onClick={handlePost}>
-                    Post a new
-                </button>
+                {user.user?.id && (
+                    <button className='btn btn-primary mx-4 my-auto' onClick={handlePost}>
+                        Post a new
+                    </button>
+                )}
             </div>
             {blogs.map(blog => (
                 <BlogItem key={blog._id} blog={blog} />
