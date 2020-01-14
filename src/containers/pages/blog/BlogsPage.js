@@ -2,6 +2,8 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
+import ReactPaginate from 'react-paginate'
+
 import BlogItem from './BlogItem'
 import * as BlogActions from 'store/actions/blog'
 import { getErrorString } from 'helper/error'
@@ -18,32 +20,44 @@ const BlogsPage = props => {
     const blogs = useSelector(state => state.blog.blogs, shallowEqual)
     const total = useSelector(state => state.blog.count, shallowEqual)
     const user = useSelector(state => state.user, shallowEqual)
+    const search = useSelector(state => state.blog.search, shallowEqual)
+    const page = useSelector(state => state.blog.page, shallowEqual)
+    const ascend = useSelector(state => state.blog.ascend, shallowEqual)
 
     const handlePost = React.useCallback(e => {
         history.push('/blog/create')
     }, [history])
 
-    const getBlogs = React.useCallback(async (page, size) => {
+    const handlePageClick = React.useCallback(data => {
+        const newPage = { ...page, no: data.selected }
+        dispatch(BlogActions.setPageInfo(newPage))
+    }, [dispatch, page])
+
+    const pageCount = React.useMemo(() => {
+        return parseInt((total + page.size - 1) / page.size)
+    }, [page, total])
+
+    const getBlogs = React.useCallback(async (page, size, search, ascend) => {
         if (busy) return
 
         setBusy(true)
         try {
-            await dispatch(BlogActions.getCount())
             await dispatch(BlogActions.getBlogs({
                 page,
-                pageSize: size
+                pageSize: size,
+                search, ascend
             }))
         } catch (err) {
             setError(getErrorString(err))
         } finally {
             setBusy(false)
         }
-    }, [dispatch, busy])
-
-    React.useEffect(() => {
-        getBlogs(1, 10)
         // eslint-disable-next-line
     }, [])
+
+    React.useEffect(() => {
+        getBlogs(page.no + 1, page.size, search, ascend)
+    }, [search, page, ascend, getBlogs])
 
     if (error) {
         return (
@@ -53,16 +67,6 @@ const BlogsPage = props => {
         )
     }
 
-    if (busy) {
-        return (
-            <section className='container blog-container'>
-                <div
-                    className='spinner-border busy text-primary m-auto'
-                    role='status'
-                />
-            </section>
-        )
-    }
 
     return (
         <section className='container blog-container'>
@@ -86,6 +90,29 @@ const BlogsPage = props => {
             {blogs.map(blog => (
                 <BlogItem key={blog._id} blog={blog} />
             ))}
+
+            {pageCount > 1 && (
+                <div className='Page'>
+                    <ReactPaginate
+                        previousLabel={'previous'}
+                        nextLabel={'next'}
+                        breakLabel={'...'}
+                        breakClassName={'break-me'}
+                        pageCount={pageCount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageClick}
+                        containerClassName={'pagination justify-content-center'}
+                        pageClassName='page-item'
+                        pageLinkClassName='page-link'
+                        activeClassName='active'
+                        previousClassName='page-item'
+                        previousLinkClassName='page-link'
+                        nextClassName='page-item'
+                        nextLinkClassName='page-link'
+                    />
+                </div>
+            )}
         </section>
     )
 }
