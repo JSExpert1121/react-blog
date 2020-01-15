@@ -5,7 +5,8 @@ const initState = {
     profile: null,
     token: null,
     refresh_token: null,
-    tokenTime: null
+    tokenTime: null,
+    public: null
 }
 
 
@@ -44,6 +45,11 @@ const userReducer = (state = initState, action) => {
             return {
                 ...state,
                 profile: payload
+            }
+        case ActionTypes.USER_GET_PUBLIC_PROFILE_SUCCESS:
+            return {
+                ...state,
+                public: payload
             }
         default:
             return state

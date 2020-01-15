@@ -47,6 +47,7 @@ const BlogsPage = props => {
                 pageSize: size,
                 search, ascend
             }))
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {

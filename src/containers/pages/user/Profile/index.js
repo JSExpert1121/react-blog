@@ -1,5 +1,6 @@
 import React from 'react'
-import { Route, Switch, Redirect, useRouteMatch, useLocation, Link } from 'react-router-dom'
+import { Route, Switch, Redirect, useRouteMatch, useLocation, Link, useHistory } from 'react-router-dom'
+import { useSelector, shallowEqual } from 'react-redux'
 
 import GeneralPage from './General'
 import EducationPage from './Education'
@@ -15,6 +16,9 @@ const ProfilePage = () => {
 
     const match = useRouteMatch()
     const location = useLocation()
+    const history = useHistory()
+    const user = useSelector(state => state.user, shallowEqual)
+
     const current = React.useMemo(() => {
         if (location.pathname.endsWith('employment')) {
             return 1
@@ -25,9 +29,20 @@ const ProfilePage = () => {
         }
     }, [location.pathname])
 
+    const onPublicProfile = React.useCallback(e => {
+        if (!user.user?.id) return
+        history.push(`/user/${user.user.id}`)
+    }, [history, user])
+
 
     return (
         <section className='d-flex flex-column shadow-sm p-5 bg-white rounded'>
+
+            <div className='d-flex justify-content-end mt-0 mb-3'>
+                <button className='btn btn-primary' onClick={onPublicProfile}>
+                    View Profile
+                </button>
+            </div>
 
             <div className="btn-group mb-4" role="group" aria-label="profile-tabs">
                 {PAGES.map((page, idx) => (

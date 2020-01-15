@@ -27,6 +27,11 @@ const gotProfile = data => ({
     payload: data
 })
 
+const gotPublicProfile = data => ({
+    type: ActionTypes.USER_GET_PUBLIC_PROFILE_SUCCESS,
+    payload: data
+})
+
 export const login = (email, password) => async dispatch => {
     const data = await AuthApis.login(email, password)
     dispatch(loginSuccess(data))
@@ -51,6 +56,11 @@ export const logout = token => async dispatch => {
 export const updateUsername = (token, firstName, lastName) => async dispatch => {
     const data = await UserApis.updateUsername(token, firstName, lastName)
     dispatch(getuserSuccess(data))
+}
+
+export const getPublicProfile = (token, id) => async dispatch => {
+    const data = await UserApis.getPublicProfile(token, id)
+    dispatch(gotPublicProfile(data.public))
 }
 
 export const getProfile = token => async dispatch => {

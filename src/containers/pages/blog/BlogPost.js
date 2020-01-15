@@ -59,6 +59,7 @@ const BlogPost = props => {
                 await dispatch(BlogActions.getBlogDetail(params?.id))
             }
             allTags.length > 0 || await dispatch(BlogActions.getTags())
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {

@@ -42,6 +42,7 @@ const BlogDetailPage = (props) => {
         setBusy(true)
         try {
             await dispatch(BlogActions.getBlogDetail(id))
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -84,6 +85,7 @@ const BlogDetailPage = (props) => {
         try {
             await dispatch(BlogActions.deleteComment(detail?._id, comment._id, user.token))
             toast.success('Delete success', { className: 'p-4' })
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -113,6 +115,7 @@ const BlogDetailPage = (props) => {
         try {
             await dispatch(BlogActions.addComment(detail._id, user.token, content))
             toast.success('Add success', { className: 'p-4' })
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -136,6 +139,7 @@ const BlogDetailPage = (props) => {
         setBusy(true)
         try {
             await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -156,6 +160,7 @@ const BlogDetailPage = (props) => {
         setBusy(true)
         try {
             await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -176,6 +181,7 @@ const BlogDetailPage = (props) => {
         setBusy(true)
         try {
             await dispatch(BlogActions.updateBlog(detail._id, user.token, newObj))
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {

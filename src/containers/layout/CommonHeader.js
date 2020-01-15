@@ -73,7 +73,7 @@ const CommonHeader = () => {
                                 </div>
                                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <Link className="dropdown-item" to='/user/setting'>User Setting</Link>
-                                    <Link className="dropdown-item" to='/user/profile'>My Profile</Link>
+                                    <Link className="dropdown-item" to={`/user/${user.user.id}`}>My Profile</Link>
                                     <div className="dropdown-divider"></div>
                                     <button className="dropdown-item" onClick={logout}>Log out</button>
                                 </div>

@@ -33,6 +33,11 @@ export default {
         token
     ),
 
+    getPublicProfile: (token, id) => RestClient.authGet(
+        `${PROFILE_BASE_URL}/${id}`,
+        token
+    ),
+
     updateProfile: (token, data) => RestClient.authPut(
         `${PROFILE_BASE_URL}`,
         token,
