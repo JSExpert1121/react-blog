@@ -54,12 +54,7 @@ const GeneralProfile = () => {
             }))
             toast.success('Profile updated', { className: 'p-4' })
         } catch (err) {
-            const error = err.data
-            if (error.errors) {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
         }

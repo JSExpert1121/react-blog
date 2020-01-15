@@ -114,6 +114,48 @@ const Public = props => {
                         <h5 className='text-dark'>
                             {publicProfile?.title || ''}
                         </h5>
+                        <div className='d-flex'>
+                            {publicProfile?.linkedin && (
+                                <a
+                                    className='btn btn-social-icon btn-linkedin social mx-2'
+                                    href={publicProfile?.linkedin}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    <i className='fa fa-linkedin social'></i>
+                                </a>
+                            )}
+                            {publicProfile?.github && (
+                                <a
+                                    className='btn btn-social-icon btn-github social mx-2'
+                                    href={publicProfile?.github}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    <i className='fa fa-github social'></i>
+                                </a>
+                            )}
+                            {publicProfile?.twitter && (
+                                <a
+                                    className='btn btn-social-icon btn-twitter social mx-2'
+                                    href={publicProfile?.twitter}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    <i className='fa fa-twitter social'></i>
+                                </a>
+                            )}
+                            {publicProfile?.facebook && (
+                                <a
+                                    className='btn btn-social-icon btn-facebook social mx-2'
+                                    href={publicProfile?.facebook}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    <i className='fa fa-facebook social'></i>
+                                </a>
+                            )}
+                        </div>
                     </div>
                 </div>
 
