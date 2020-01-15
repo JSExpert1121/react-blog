@@ -5,11 +5,13 @@ import { useSelector, shallowEqual } from 'react-redux'
 import GeneralPage from './General'
 import EducationPage from './Education'
 import HistoryPage from './History'
+import SocialLinks from './Social'
 
 const PAGES = [
     { label: 'General', path: 'general', component: GeneralPage },
     { label: 'Employment', path: 'employment', component: GeneralPage },
-    { label: 'Education', path: 'education', component: GeneralPage }
+    { label: 'Education', path: 'education', component: GeneralPage },
+    { label: 'Social', path: 'social', component: SocialLinks }
 ]
 
 const ProfilePage = () => {
@@ -24,6 +26,8 @@ const ProfilePage = () => {
             return 1
         } else if (location.pathname.endsWith('education')) {
             return 2
+        } else if (location.pathname.endsWith('social')) {
+            return 3
         } else {
             return 0
         }
@@ -65,6 +69,9 @@ const ProfilePage = () => {
                 </Route>
                 <Route path={`${match.url}/education`}>
                     <EducationPage />
+                </Route>
+                <Route path={`${match.url}/social`}>
+                    <SocialLinks />
                 </Route>
                 <Redirect to={`${match.url}/general`} />
             </Switch>
