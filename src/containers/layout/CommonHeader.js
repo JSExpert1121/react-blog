@@ -4,19 +4,34 @@ import { Link } from 'react-router-dom'
 
 import Avatar from 'components/avatar/Avatar'
 import * as UserActions from 'store/actions/user'
+import * as BlogActions from 'store/actions/blog'
 
 
 const CommonHeader = () => {
 
+
     const user = useSelector(state => state.user, shallowEqual)
+    const searchKey = useSelector(state => state.blog.search, shallowEqual)
     const dispatch = useDispatch()
+
+    const [filter, setFilter] = React.useState(searchKey)
+
     const logout = React.useCallback(async () => {
         try {
-            dispatch(UserActions.logout(user.token))
+            await dispatch(UserActions.logout(user.token))
         } catch (error) {
             console.log(error)
         }
     }, [dispatch, user.token])
+
+    const search = React.useCallback(e => {
+        e.preventDefault()
+        dispatch(BlogActions.setSearchFilter(filter))
+    }, [dispatch, filter])
+
+    const filterChange = React.useCallback(e => {
+        setFilter(e.target.value)
+    }, [])
 
     return (
         <header>
@@ -28,8 +43,21 @@ const CommonHeader = () => {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <form className="mx-4 d-flex my-2 my-lg-0 ml-2 flex-grow-1">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <input
+                            className="form-control mr-sm-2"
+                            type="search"
+                            placeholder="Search"
+                            aria-label="Search"
+                            value={filter}
+                            onChange={filterChange}
+                        />
+                        <button
+                            className="btn btn-outline-success my-2 my-sm-0"
+                            type="submit"
+                            onClick={search}
+                        >
+                            Search
+                        </button>
                     </form>
                     <ul className="navbar-nav mx-4">
                         {!user.user && (
@@ -45,7 +73,7 @@ const CommonHeader = () => {
                                 </div>
                                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <Link className="dropdown-item" to='/user/setting'>User Setting</Link>
-                                    <Link className="dropdown-item" to='/user/profile'>My Profile</Link>
+                                    <Link className="dropdown-item" to={`/user/${user.user.id}`}>My Profile</Link>
                                     <div className="dropdown-divider"></div>
                                     <button className="dropdown-item" onClick={logout}>Log out</button>
                                 </div>

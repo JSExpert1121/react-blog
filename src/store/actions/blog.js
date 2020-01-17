@@ -6,9 +6,9 @@ export const setSearchKeys = keys => ({
     payload: keys
 })
 
-export const setSearchFilters = filters => ({
+export const setSearchFilter = filter => ({
     type: ActionTypes.BLOG_SET_SEARCH_STR,
-    payload: filters
+    payload: filter
 })
 
 export const setPageInfo = pageInfo => ({
@@ -51,7 +51,8 @@ export const getCount = () => async dispatch => {
 }
 
 export const getBlogs = options => async dispatch => {
-    const { data } = await BlogApis.get(options)
+    const { data, count } = await BlogApis.get(options)
+    dispatch(gotBlogCount(count))
     dispatch(gotBlogList({ data }))
 }
 

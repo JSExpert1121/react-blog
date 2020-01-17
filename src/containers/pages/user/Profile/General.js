@@ -13,6 +13,7 @@ import ImageUploadDialog from 'components/dialogs/ImageUploadDialog'
 
 import * as UserActions from 'store/actions/user'
 import UserApis from 'service/user'
+import { getErrorString } from 'helper/error'
 
 import '../user.scss'
 
@@ -22,16 +23,16 @@ const GeneralProfile = () => {
     const dispatch = useDispatch()
 
     // title and description
-    const [title, setTitle] = React.useState(user.profile ? user.profile.title || '' : '')
-    const [desc, setDesc] = React.useState(user.profile ? user.profile.description || '' : '')
+    const [title, setTitle] = React.useState(user.profile?.title || '')
+    const [desc, setDesc] = React.useState(user.profile?.description || '')
 
     // address
-    const [address1, setAddr1] = React.useState(user.profile ? user.profile.address1 || '' : '')
-    const [address2, setAddr2] = React.useState(user.profile ? user.profile.address2 || '' : '')
-    const [city, setCity] = React.useState(user.profile ? user.profile.city || '' : '')
-    const [zip, setZip] = React.useState(user.profile ? user.profile.zipCode || '' : '')
-    const [state, setState] = React.useState(user.profile ? user.profile.state || '' : '')
-    const [country, setCountry] = React.useState(user.profile ? user.profile.country || '' : '')
+    const [address1, setAddr1] = React.useState(user.profile?.address1 || '')
+    const [address2, setAddr2] = React.useState(user.profile?.address2 || '')
+    const [city, setCity] = React.useState(user.profile?.city || '')
+    const [zip, setZip] = React.useState(user.profile?.zipCode || '')
+    const [state, setState] = React.useState(user.profile?.state || '')
+    const [country, setCountry] = React.useState(user.profile?.country || '')
 
     // activity
     const [error, setError] = React.useState('')
@@ -53,12 +54,7 @@ const GeneralProfile = () => {
             }))
             toast.success('Profile updated', { className: 'p-4' })
         } catch (err) {
-            const error = err.data
-            if (error.errors) {
-                setError(error.errors)
-            } else {
-                setError('Unknown Error')
-            }
+            setError(getErrorString(err))
         } finally {
             setBusy(false)
         }
@@ -135,12 +131,7 @@ const GeneralProfile = () => {
             toast.success('Phone verified', { className: 'p-4' })
             setError('')
         } catch (err) {
-            const error = err.data
-            if (error.errors) {
-                setError(error.errors)
-            } else {
-                setError('Unknown error')
-            }
+            setError(getErrorString(err))
             result = false
         } finally {
             setBusy(false)
@@ -181,7 +172,7 @@ const GeneralProfile = () => {
 
             <form className='user-form'>
                 {/* avatar */}
-                <div className='form-group row' id='profile-bio'>
+                <div className='form-group row p-4' id='profile-bio'>
                     <Avatar
                         avatar={user.profile ? user.profile.avatar : ''}
                         name={user.user.username}

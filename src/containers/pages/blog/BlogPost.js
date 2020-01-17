@@ -59,6 +59,7 @@ const BlogPost = props => {
                 await dispatch(BlogActions.getBlogDetail(params?.id))
             }
             allTags.length > 0 || await dispatch(BlogActions.getTags())
+            setError('')
         } catch (err) {
             setError(getErrorString(err))
         } finally {
@@ -119,7 +120,6 @@ const BlogPost = props => {
             history.push(`/blog/${id}`)
         } catch (error) {
             setError(getErrorString(error))
-        } finally {
             setBusy(false)
         }
     }, [busy, update, user.token, title, short, tags, desc, detail, dispatch, history])

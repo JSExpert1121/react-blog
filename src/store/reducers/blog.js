@@ -5,12 +5,12 @@ const initState = {
     blogs: [],
     current: null,
     keys: [],
-    filters: [],
+    search: '',
     page: {
         no: 0,
         size: 10
     },
-    ascend: true,
+    ascend: false,
     tags: []
 }
 
@@ -46,7 +46,7 @@ const blogReducer = (state = initState, action) => {
         case ActionTypes.BLOG_SET_SEARCH_STR:
             return {
                 ...state,
-                filters: [...payload]
+                search: payload
             }
         case ActionTypes.BLOG_SET_SORT_ORDER:
             return {

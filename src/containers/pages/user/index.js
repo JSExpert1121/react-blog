@@ -1,10 +1,11 @@
 import React from 'react'
-import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
 
 import { CommonLayout } from 'containers/layout'
 import ProfilePage from './Profile'
 import SettingPage from './Setting'
 import PasswordPage from './Password'
+import PublicProfile from './Public'
 
 const UserPages = () => {
 
@@ -22,7 +23,9 @@ const UserPages = () => {
                 <Route path={`${match.url}/changepass`}>
                     <PasswordPage />
                 </Route>
-                <Redirect to={`${match.url}/setting`} />
+                <Route path={`${match.url}/:id`}>
+                    <PublicProfile />
+                </Route>
             </Switch>
         </CommonLayout>
     )
